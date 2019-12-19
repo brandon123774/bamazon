@@ -43,60 +43,91 @@ function showProducts() {
 };
 
 
-  //query select products table
-  // show the results
-  // you ask to the customer what product want and how many units (inquiere)
+//query select products table
+// show the results
+// you ask to the customer what product want and how many units (inquiere)
 
-  // with the response
-  // you need to verify if you have enough stock
-  // if yes you sell and update de db the new stock
-  // if not tell the user
-  // you ask if they want to buy other thins
-  // if yes showProdcuts
-  // if no you finish
+// with the response
+// you need to verify if you have enough stock
+// if yes you sell and update de db the new stock
+// if not tell the user
+// you ask if they want to buy other thins
+// if yes showProdcuts
+// if no you finish
 
-  function requestedProduct() {
+function requestedProduct() {
 
-    //use inquirer to ask prompts to the user
-    inquirer.prompt([{
-      name: "ID",
-      type: "input",
-      message: "What is the ID of the item that you would like to purchase?"
+  //use inquirer to ask prompts to the user
+  inquirer.prompt([{
+    name: "ID",
+    type: "input",
+    message: "What is the ID of the item that you would like to purchase?"
 
-    },  {
-        name: "units",
-        type: "input",
-        message: "How many would you like?"
-    }]).then(function(wanted) {
-        var query = "SELECT stock_quantity, price, product_sales, department_name FROM products WHERE?";
-        connection.query(query, {item_id: wanted.ID}, function(err, res)  {
+  }, {
+    name: "units",
+    type: "input",
+    message: "How many would you like?"
+  }]).then(function (wanted) {
+    var query = "SELECT stock_quantity, price, product_sales, department_name FROM products WHERE?";
+    connection.query(query, { item_id: wanted.ID }, function (err, res) {
 
-          //throw error
-          if (err) throw err;
+      //throw error
+      if (err) throw err;
 
-          //create var for each sql table category used in this function
-          var current_stock = res[0].stock_quantity;
-          var price_per_unit = res[0].price;
-          var productSales = res[0].product_sales;
-          var productDepartment = res[0].department_name;
+      //create var for each sql table category used in this function
+      var current_stock = res[0].stock_quantity;
+      var price_per_unit = res[0].price;
+      var productSales = res[0].product_sales;
+      var productDepartment = res[0].department_name;
 
-          //check to see if enough stock of the item requested
-          if (current_stock >= wanted.units)  {
-            finishPurchase(current_stock, price_per_unit, productSales, productDepartment, wanted.ID, wanted.units);
-          } else {
-            console.log(" There is not enough stock of this product!");
+      //check to see if enough stock of the item requested
+      if (current_stock >= wanted.units) {
+        finishPurchase(current_stock, price_per_unit, productSales, productDepartment, wanted.ID, wanted.units);
+      } else {
+        console.log(" There is not enough stock of this product!");
 
-            requestedProduct();
-          }
-        });
+        requestedProduct();
+      }
     });
-  };
+  });
+};
 
-  function sell() {
-    // if yes you sell and update de db the new stock  (if you do the supervisor you need to update the sales (units * price))
+function finishPurchase(currentStock, price, productSales, productDepartment, selectedID, selectedUnits) {
 
-  }
+  //updated stock amounts after item is bought
+  var updatedStock = currentStock - selectedUnits;
 
-  function end() {
+  //calculated prices
+  var totalPrice = price * selectedUnits;
 
-  }
+  //updates the total product sales after user purchase
+  var updatedSales = parseInt(productSales) + parseInt(totalPrice);
+
+  //updates the DB with new stock amounts
+  var query = "UPDATE products SET ? WHERE ?";
+  connection.query(query, [{
+    stock_quantity: updatedStock,
+    product_sales: updatedSales
+  }, {
+    item_id: selectedID
+  }], function (err, res) {
+    //throw err
+    if (err) throw err;
+
+    //purchase completed
+    console.log("Purchase completed.")
+
+    //total user spent
+    console.log("You're payment has been recieved : " + totalPrice);
+
+    //revenue the department made from sale
+    upddateDepartmentRevenue(updatedSales, productDepartment);
+  });
+};
+// if yes you sell and update de db the new stock  (if you do the supervisor you need to update the sales (units * price))
+
+
+
+function end() {
+
+}
