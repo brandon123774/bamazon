@@ -58,7 +58,7 @@ function requestedProduct() {
     type: "input",
     message: "How many would you like?"
   }]).then(function (wanted) {
-    var query = "SELECT stock_quantity, price, product_sales, department_name FROM products WHERE?";
+    var query = "SELECT stock_quantity, price, product_sales, department_name FROM products WHERE ?";
     connection.query(query, { item_id: wanted.ID }, function (err, res) {
 
       //throw error
@@ -115,7 +115,7 @@ function finishPurchase(currentStock, price, productSales, productDepartment, se
   });
 };
 
-function updateDepartmentRevenue(updatedSales, productSales) {
+function updateDepartmentRevenue(updatedSales, productDepartment) {
 
   //query from the db for department total sales
   var query = "SELECT total_sales FROM departments WHERE ?";
@@ -128,7 +128,7 @@ function updateDepartmentRevenue(updatedSales, productSales) {
 
     var departmentSales = res[0].total_sales;
 
-    var updatedDepartmentSales = parseInt(departmentSales) + parseInt(updatedDepartmentSales);
+    var updatedDepartmentSales = parseInt(departmentSales) + parseInt(updatedSales);
 
     //the final updated total sales for the department
     finalDepartmentSalesUpdate(updatedDepartmentSales, productDepartment);
