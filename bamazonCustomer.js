@@ -129,7 +129,7 @@ function updateDepartmentRevenue(updatedSales, productSales) {
 
   //query from the db for department total sales
   var query = "SELECT total_sales FROm departments WHERE ?";
-  connection.query(query, { department_name: productDepartment}, function (err, res)  {
+  connection.query(query, { department_name: productDepartment }, function (err, res) {
 
     //throw error
     if (err) throw err;
@@ -144,4 +144,22 @@ function updateDepartmentRevenue(updatedSales, productSales) {
     finalDepartmentSalesUpdate(updatedDepartmentSales, productDepartment);
   });
 };
+
+//add the final department sales to the db
+function finalDepartmentSalesUpdate(updatedDepartmentSales, productDepartment) {
+  //create a query for this
+  var query = "UPDATE departments SET ? WHERE ?";
+  connection.query(query, [{
+    total_sales: updatedDepartmentSales
+  }, {
+    department_name: productDepartment
+  }], function (err, res) {
+    if (err) throw err;
+
+    //go back and display the products again so that user can buy more stuff
+    showProducts();
+  });
+};
+
+
 
