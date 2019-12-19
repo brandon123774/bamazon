@@ -12,7 +12,7 @@ var connection = mysql.createConnection({
   //credentials 
   user: "root",
   password: "password",
-  database: "bamazonDB"
+  database: "bamazon_DB"
 });
 
 //when connection doesn't work, need to throw error
@@ -31,29 +31,19 @@ function showProducts() {
   connection.query(query, function (err, res) {
     //throw error 
     if (err) throw err;
+    console.log("----------------------------------------------------------------------------------");  
 
     //iterate through the results list of products
     for (var i = 0; i < res.length; i++) {
-      console.log("ID:" + res[i].item.id + " || Product Name: " + res[i].product.name + " || Price: " + res[i].price);
-    }
+      
+      console.log("ID:" + res[i].item_id + " || Product Name: " + res[i].product_name + " || Price: " + res[i].price);
+      console.log("----------------------------------------------------------------------------------");   
+     }
     //call on the requestedProduct
     requestedProduct();
 
   });
 };
-
-
-//query select products table
-// show the results
-// you ask to the customer what product want and how many units (inquiere)
-
-// with the response
-// you need to verify if you have enough stock
-// if yes you sell and update de db the new stock
-// if not tell the user
-// you ask if they want to buy other thins
-// if yes showProdcuts
-// if no you finish
 
 function requestedProduct() {
 
@@ -128,8 +118,8 @@ function finishPurchase(currentStock, price, productSales, productDepartment, se
 function updateDepartmentRevenue(updatedSales, productSales) {
 
   //query from the db for department total sales
-  var query = "SELECT total_sales FROm departments WHERE ?";
-  connection.query(query, { department_name: productDepartment }, function (err, res) {
+  var query = "SELECT total_sales FROM departments WHERE ?";
+  connection.query(query, { department_name: productDepartment}, function (err, res) {
 
     //throw error
     if (err) throw err;

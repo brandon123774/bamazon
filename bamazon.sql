@@ -4,14 +4,24 @@ CREATE DATABASE bamazon_DB;
 USE bamazon_DB;
 
 CREATE TABLE products(
-  id INT NOT NULL AUTO_INCREMENT,
-  item_id INT,
+  item_id INT NOT NULL AUTO_INCREMENT,
   product_name VARCHAR(100) NOT NULL,
   department_name VARCHAR(100) NOT NULL,
   price DECIMAL (6, 2),
-  stock_quantity INT (100),
-  PRIMARY KEY (id)
+  stock_quantity INT NOT NULL DEFAULT '1',
+  PRIMARY KEY (item_id)
 );
+
+CREATE TABLE departments (
+  department_id INT NOT NULL AUTO_INCREMENT,
+  department_name VARCHAR(100) NOT NULL,
+  over_head_costs DECIMAL(7,2) NOT NULL DEFAULT '0.00',
+  total_sales DECIMAL(7,2) NOT NULL DEFAULT '0.00',
+  PRIMARY KEY (department_id)
+);
+Select * From departments;
+
+ALTER TABLE products ADD COLUMN product_sales DECIMAL(7,2) DEFAULT '0.00';
 
 INSERT INTO products(item_id, product_name, department_name, price, stock_quantity)
 VALUES("1", "Ticket to Ride", "Board Games", "29.95", "87");
@@ -41,3 +51,5 @@ VALUES("9", "1080p Home Theater Projector", "Small Electronics", "619.95", "12")
 
 INSERT INTO products(item_id, product_name, department_name, price, stock_quantity)
 VALUES("10", "Oculus Quest Virtual Reality Headset", "Electronics", "399.95", "75");
+
+
