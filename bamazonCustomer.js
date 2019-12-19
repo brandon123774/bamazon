@@ -121,13 +121,27 @@ function finishPurchase(currentStock, price, productSales, productDepartment, se
     console.log("You're payment has been recieved : " + totalPrice);
 
     //revenue the department made from sale
-    upddateDepartmentRevenue(updatedSales, productDepartment);
+    updateDepartmentRevenue(updatedSales, productDepartment);
   });
 };
-// if yes you sell and update de db the new stock  (if you do the supervisor you need to update the sales (units * price))
 
+function updateDepartmentRevenue(updatedSales, productSales) {
 
+  //query from the db for department total sales
+  var query = "SELECT total_sales FROm departments WHERE ?";
+  connection.query(query, { department_name: productDepartment}, function (err, res)  {
 
-function end() {
+    //throw error
+    if (err) throw err;
 
-}
+    //var for department sales and updated department sales
+
+    var departmentSales = res[0].total_sales;
+
+    var updatedDepartmentSales = parseInt(departmentSales) + parseInt(updatedDepartmentSales);
+
+    //the final updated total sales for the department
+    finalDepartmentSalesUpdate(updatedDepartmentSales, productDepartment);
+  });
+};
+
