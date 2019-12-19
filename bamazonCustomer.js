@@ -1,28 +1,37 @@
-//required fields
+//required the node modules
 var mysql = require ("mysql");
 var inquirer = require ("inquirer");
 
 //create connections
 var connection = mysql.createConnection({
     host: "localhost",
-  
-    port: 3306,
 
+  //the port
+    port: 3306,
+    
+    //credentials 
     user: "root",
     password: "password",
     database: "bamazonDB"
   });
 
-  //establish the connection
+  //when connection doesn't work, need to throw error
   connection.connect(function(err) {
     if (err) throw err;
     console.log("connected as id " + connection.threadId + "\n");
+       
+    // call to show the products
     showProducts()
-   // call to show the products
+
   });
   
-  
+//function to show all products
 function showProducts(){
+  var query = "SELECT * FROM products";
+  connection.query(query, function(err, res)  {
+    if (err) throw err;
+    
+  })
 
   //query select products table
   // show the results
