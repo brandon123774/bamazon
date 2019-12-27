@@ -21,7 +21,7 @@ CREATE TABLE departments(
 );
 Select * From departments;
 
-ALTER TABLE products ADD COLUMN product_sales DECIMAL(7,2) DEFAULT '0.00';
+ALTER TABLE products ADD COLUMN product_sales DECIMAL(6,2) DEFAULT '0.00';
 
 INSERT INTO products(item_id, product_name, department_name, price, stock_quantity)
 VALUES("1", "Ticket to Ride", "Board Games", "29.95", "87");

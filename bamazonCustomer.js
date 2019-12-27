@@ -21,7 +21,7 @@ connection.connect(function (err) {
   console.log("connected as id " + connection.threadId + "\n");
 
   // call to show the products
-  showProducts()
+  showProducts();
 
 });
 
@@ -111,45 +111,45 @@ function finishPurchase(currentStock, price, productSales, productDepartment, se
     console.log("You're payment has been recieved : " + totalPrice);
 
     //revenue the department made from sale
-    updateDepartmentRevenue(updatedSales, productDepartment);
+    // updateDepartmentRevenue(updatedSales, productDepartment);
   });
 };
 
-function updateDepartmentRevenue(updatedSales, productDepartment) {
+// function updateDepartmentRevenue(updatedSales, productDepartment) {
 
-  //query from the db for department total sales
-  var query = "SELECT total_sales FROM departments WHERE ?";
-  connection.query(query, { department_name: productDepartment}, function (err, res) {
+//   //query from the db for department total sales
+//   var query = "SELECT total_sales FROM departments WHERE ?";
+//   connection.query(query, { department_name: productDepartment}, function (err, res) {
 
-    //throw error
-    if (err) throw err;
+//     //throw error
+//     if (err) throw err;
 
-    //var for department sales and updated department sales
+//     //var for department sales and updated department sales
 
-    var departmentSales = res[0].total_sales;
+//     var departmentSales = res[0].total_sales;
 
-    var updatedDepartmentSales = parseInt(departmentSales) + parseInt(updatedSales);
+//     var updatedDepartmentSales = parseInt(departmentSales) + parseInt(updatedSales);
 
     //the final updated total sales for the department
-    finalDepartmentSalesUpdate(updatedDepartmentSales, productDepartment);
-  });
-};
+    // finalDepartmentSalesUpdate(updatedDepartmentSales, productDepartment);
+//   });
+// };
 
-//add the final department sales to the db
-function finalDepartmentSalesUpdate(updatedDepartmentSales, productDepartment) {
-  //create a query for this
-  var query = "UPDATE departments SET ? WHERE ?";
-  connection.query(query, [{
-    total_sales: updatedDepartmentSales
-  }, {
-    department_name: productDepartment
-  }], function (err, res) {
-    if (err) throw err;
+// //add the final department sales to the db
+// function finalDepartmentSalesUpdate(updatedDepartmentSales, productDepartment) {
+//   //create a query for this
+//   var query = "UPDATE departments SET ? WHERE ?";
+//   connection.query(query, [{
+//     total_sales: updatedDepartmentSales
+//   }, {
+//     department_name: productDepartment
+//   }], function (err, res) {
+//     if (err) throw err;
 
-    //go back and display the products again so that user can buy more stuff
-    showProducts();
-  });
-};
+//     //go back and display the products again so that user can buy more stuff
+//     showProducts();
+//   });
+// };
 
 
 
